@@ -43,11 +43,11 @@ Keep answers short and helpful.
       reply: completion.choices[0].message.content
     });
 
-  } catch (error) {
-    console.error("ERROR:", error);
-
-    return res.status(500).json({
-      error: error.message
-    });
-  }
+catch (error) {
+  console.error(
+    "ERROR DETAILS:",
+    error.response?.status,
+    error.response?.data || error
+  );
+  return res.status(500).json({ error: error.message });
 }
