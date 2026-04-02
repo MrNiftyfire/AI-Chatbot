@@ -42,11 +42,9 @@ Keep answers short.
     });
 
   } catch (error) {
+  console.error("FULL ERROR:", error);
 
-    console.error(error);
-
-    res.status(500).json({
-      reply: "AI error 😢"
-    });
-  }
+  res.status(500).json({
+    reply: "Error: " + error.message
+  });
 }
