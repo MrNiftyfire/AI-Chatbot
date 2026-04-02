@@ -17,7 +17,7 @@ export default async function handler(req, res) {
     });
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
+      model: "gpt-4o-mini", // or "gpt-3.5-turbo" if you want to test
       messages: [
         {
           role: "system",
@@ -43,11 +43,14 @@ Keep answers short and helpful.
       reply: completion.choices[0].message.content
     });
 
-catch (error) {
-  console.error(
-    "ERROR DETAILS:",
-    error.response?.status,
-    error.response?.data || error
-  );
-  return res.status(500).json({ error: error.message });
+  } catch (error) {
+    if (error.response) {
+      console.error("OPENAI ERROR STATUS:", error.response.status);
+      console.error("OPENAI ERROR DATA:", error.response.data);
+    } else {
+      console.error("ERROR:", error);
+    }
+
+    return res.status(500).json({ error: "Server error, check logs" });
+  }
 }
