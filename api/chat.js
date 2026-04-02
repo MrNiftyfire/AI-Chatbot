@@ -7,35 +7,17 @@ export default async function handler(req, res) {
 
   try {
     const { message } = req.body;
-
     if (!message) {
       return res.status(400).json({ error: "No message provided" });
     }
 
-    const openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY
-    });
+    const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-4o-mini", // or "gpt-3.5-turbo" if you want to test
+      model: "gpt-4o-mini",
       messages: [
-        {
-          role: "system",
-          content: `
-You are a website assistant.
-
-Help users:
-- Navigate the site
-- Find pages
-- Answer simply
-
-Keep answers short and helpful.
-`
-        },
-        {
-          role: "user",
-          content: message
-        }
+        { role: "system", content: "You are a helpful website assistant." },
+        { role: "user", content: message }
       ]
     });
 
@@ -44,12 +26,8 @@ Keep answers short and helpful.
     });
 
   } catch (error) {
-    if (error.response) {
-      console.error("OPENAI ERROR STATUS:", error.response.status);
-      console.error("OPENAI ERROR DATA:", error.response.data);
-    } else {
-      console.error("ERROR:", error);
-    }
+    // Logging for debugging
+    console.error("OPENAI ERROR:", error);
 
     return res.status(500).json({ error: "Server error, check logs" });
   }
